@@ -1,14 +1,14 @@
 import { gql, useMutation } from "@apollo/client";
-import { faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import AuthLayout from "../components/auth/AuthLayout";
 import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
 import FormBox from "../components/auth/FormBox";
+import FormError from "../components/auth/FormError";
 import Input from "../components/auth/Input";
+import Logo from "../components/Logo";
 import PageTitle from "../components/PageTitle";
 import { FatLink } from "../components/shared";
 import routes from "../routes";
@@ -22,7 +22,7 @@ const HeaderContainer = styled.div`
 const Subtitle = styled(FatLink)`
   font-size: 16px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const CREATEACCOUNT_MUTATION = gql`
@@ -47,6 +47,7 @@ const CREATEACCOUNT_MUTATION = gql`
 `;
 
 function SignUp() {
+  const location = useLocation();
   const history = useHistory();
   const onCompleted = (data) => {
     const { username, password } = getValues();
@@ -83,7 +84,7 @@ function SignUp() {
       <PageTitle title="Sign Up" />
       <FormBox>
         <HeaderContainer>
-          <FontAwesomeIcon icon={faInstagram} size="3x" />
+          <Logo />
           <Subtitle>
             HAI를 정상적으로 이용하시기 위해 새로운 계정을 생성하여 주세요.
           </Subtitle>
@@ -91,12 +92,14 @@ function SignUp() {
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             ref={register({
-              required: "First Name is Required",
+              required: "First Name을 입력해 주세요",
             })}
             name="firstName"
             type="text"
             placeholder="First Name"
+            hasError={Boolean(errors.firstName?.message)}
           />
+          <FormError message={errors.firstName?.message} />
           <Input
             ref={register}
             name="lastName"
@@ -105,28 +108,34 @@ function SignUp() {
           />
           <Input
             ref={register({
-              required: "Username is Required",
+              required: "Username을 입력해 주세요",
             })}
             name="username"
             type="text"
             placeholder="Username"
+            hasError={Boolean(errors.username?.message)}
           />
+          <FormError message={errors.username?.message} />
           <Input
             ref={register({
-              required: "Email is Required",
+              required: "Email을 입력해 주세요",
             })}
             name="email"
             type="email"
             placeholder="Email"
+            hasError={Boolean(errors.email?.message)}
           />
+          <FormError message={errors.email?.message} />
           <Input
             ref={register({
-              required: "Password is Required",
+              required: "Password를 입력해 주세요",
             })}
             name="password"
             type="password"
             placeholder="Password"
+            hasError={Boolean(errors.password?.message)}
           />
+          <FormError message={errors.password?.message} />
           <Button
             type="submit"
             value={loading ? "Loading.." : "Sign Up"}

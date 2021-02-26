@@ -15,6 +15,7 @@ import FormBox from "../components/auth/FormBox";
 import FormError from "../components/auth/FormError";
 import Input from "../components/auth/Input";
 import Separator from "../components/auth/Separator";
+import Logo from "../components/Logo";
 import PageTitle from "../components/PageTitle";
 import routes from "../routes";
 
@@ -44,7 +45,6 @@ const LOGIN_MUTATION = gql`
 
 function Login() {
   const location = useLocation();
-  console.log(location);
   const {
     register,
     handleSubmit,
@@ -98,16 +98,16 @@ function Login() {
       <PageTitle title="Login" />
       <FormBox>
         <div>
-          <FontAwesomeIcon icon={faInstagram} size="3x" />
+          <Logo />
         </div>
         <Notification>{location?.state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             ref={register({
-              required: "Username is Required",
+              required: "Username을 입력해 주세요",
               minLength: {
                 value: 5,
-                message: "Short Username, more than 5 chars",
+                message: "짧은 Username입니다, 5글자 이상 입력해 주세요",
               },
             })}
             onChange={clearLoginError}
@@ -119,7 +119,7 @@ function Login() {
           <FormError message={errors.username?.message} />
           <Input
             ref={register({
-              required: "Password is Required",
+              required: "Password를 입력해 주세요",
             })}
             onChange={clearLoginError}
             name="password"
