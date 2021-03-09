@@ -2,6 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import { FatText } from "../components/shared";
+import Spo2Chart from "../components/Spo2Chart";
 
 const SPO2_QUERY = gql`
   query seeSpo2 {
@@ -38,10 +39,8 @@ const Username = styled(FatText)`
   margin-left: 15px;
 `;
 
-const Spo2Graph = styled.div``;
-
-const TestImg = styled.img`
-  max-width: 100%;
+const Spo2Graph = styled.div`
+  width: 700px;
 `;
 
 function Home() {
@@ -54,7 +53,9 @@ function Home() {
             <Avatar lg url={spo2.user.avatar} />
             <Username>{spo2.user.username}</Username>
           </Spo2Header>
-          <TestImg src={spo2.user.avatar} />
+          <Spo2Graph>
+            <Spo2Chart spo2={spo2.maxSpo2} />
+          </Spo2Graph>
         </Spo2Container>
       ))}
     </div>
