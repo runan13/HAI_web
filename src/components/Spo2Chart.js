@@ -1,4 +1,3 @@
-import { Bar } from "react-chartjs-2";
 import styled from "styled-components";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
@@ -31,7 +30,6 @@ const categories = ["Max SpO2", "Min SpO2", "Avg SpO2"].reverse();
 
 function Spo2Chart(spo2) {
   const obj = Object.values(spo2);
-  console.log(obj);
 
   const chartOptions = {
     chart: {

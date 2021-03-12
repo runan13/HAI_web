@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import AuthLayout from "../components/auth/AuthLayout";
 import BottomBox from "../components/auth/BottomBox";
@@ -47,12 +47,11 @@ const CREATEACCOUNT_MUTATION = gql`
 `;
 
 function SignUp() {
-  const location = useLocation();
   const history = useHistory();
   const onCompleted = (data) => {
     const { username, password } = getValues();
     const {
-      createAccount: { ok, error },
+      createAccount: { ok },
     } = data;
     if (!ok) {
       return;
@@ -109,6 +108,10 @@ function SignUp() {
           <Input
             ref={register({
               required: "Username을 입력해 주세요",
+              minLength: {
+                value: 5,
+                message: "짧은 Username입니다, 5글자 이상 입력해 주세요",
+              },
             })}
             name="username"
             type="text"

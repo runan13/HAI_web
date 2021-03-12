@@ -1,7 +1,8 @@
 import { useReactiveVar } from "@apollo/client";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faDochub } from "@fortawesome/free-brands-svg-icons";
 import { faHeartbeat, faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { exact } from "prop-types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
@@ -13,7 +14,7 @@ import HeaderLogo from "./HeaderLogo";
 const SHeader = styled.header`
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.borderColor};
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: white;
   padding: 18px 0px;
   display: flex;
   align-items: center;
@@ -60,13 +61,17 @@ function Header() {
           {isLoggedIn ? (
             <IconsContainer>
               <Icon>
-                <FontAwesomeIcon icon={faHome} size="2x" />
+                <FontAwesomeIcon icon={faDochub} size="2x" />
               </Icon>
               <Icon>
-                <FontAwesomeIcon icon={faHeartbeat} size="2x" />
+                <Link to={`/SpO2/${data?.me?.username}`}>
+                  <FontAwesomeIcon icon={faHeartbeat} size="2x" />
+                </Link>
               </Icon>
               <Icon>
-                <Avatar url={data?.me?.avatar} />
+                <Link to={`/users/${data?.me?.username}`}>
+                  <Avatar url={data?.me?.avatar} />
+                </Link>
               </Icon>
             </IconsContainer>
           ) : (
