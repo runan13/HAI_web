@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
-import { BaseBox, FatText } from "../components/shared";
+import { BaseBox, DivTitle, FatText } from "../components/shared";
 import Spo2Chart from "../components/Spo2Chart";
 
 const SPO2_QUERY = gql`
@@ -101,12 +101,6 @@ const TopContentValue = styled.div`
   margin-top: 13px;
   font-size: 24px;
   font-weight: 500;
-`;
-
-const DivTitle = styled.span`
-  font-size: 24px;
-  font-weight: 600;
-  margin: 30px;
 `;
 
 function Home() {

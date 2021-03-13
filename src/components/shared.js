@@ -14,3 +14,9 @@ export const FatLink = styled.span`
 export const FatText = styled.span`
   font-weight: 600;
 `;
+
+export const DivTitle = styled.span`
+  font-size: 24px;
+  font-weight: 600;
+  margin: 30px;
+`;

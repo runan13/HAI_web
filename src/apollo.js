@@ -8,6 +8,7 @@ import { setContext } from "@apollo/client/link/context";
 
 const TOKEN = "token";
 const DARK_MODE = "DARK_MODE";
+const EDIT_PROFILE = "Edit_Profile";
 
 export const isLoggedInVar = makeVar(Boolean(localStorage.getItem(TOKEN)));
 
@@ -19,7 +20,7 @@ export const logUserIn = (token) => {
 export const logUserOut = () => {
   localStorage.removeItem(TOKEN);
   isLoggedInVar(false);
-  window.location.reload();
+  window.location.assign("http://localhost:3000/");
 };
 
 export const darkModeVar = makeVar(Boolean(localStorage.getItem(DARK_MODE)));
@@ -32,6 +33,20 @@ export const enableDarkMode = () => {
 export const disableDarkMode = () => {
   localStorage.removeItem(DARK_MODE);
   darkModeVar(false);
+};
+
+export const openEditProfileVar = makeVar(
+  Boolean(localStorage.getItem(EDIT_PROFILE))
+);
+
+export const enableOpenEditProfile = () => {
+  localStorage.setItem(EDIT_PROFILE, "true");
+  openEditProfileVar(true);
+};
+
+export const disableOpenEditProfile = () => {
+  localStorage.setItem(EDIT_PROFILE, "false");
+  openEditProfileVar(false);
 };
 
 const httpLink = createHttpLink({
@@ -49,5 +64,11 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        keyFields: (obj) => `User:${obj.username}`,
+      },
+    },
+  }),
 });

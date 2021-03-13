@@ -55,7 +55,9 @@ function Header() {
     <SHeader>
       <Wrapper>
         <Column>
-          <HeaderLogo />
+          <Link to={routes.home}>
+            <HeaderLogo />
+          </Link>
         </Column>
         <Column>
           {isLoggedIn ? (

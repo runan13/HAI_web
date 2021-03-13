@@ -38,10 +38,14 @@ function App() {
                 </Route>
               ) : null}
               <Route exact path={`/users/:username`}>
-                <Profile />
+                <Layout>
+                  <Profile />
+                </Layout>
               </Route>
-              <Route>
-                <SpO2 exact path={`/SpO2/:username`} />
+              <Route exact path={`/SpO2/:username`}>
+                <Layout>
+                  <SpO2 />
+                </Layout>
               </Route>
               <Route>
                 <NotFound />
