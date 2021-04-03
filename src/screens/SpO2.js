@@ -1,10 +1,16 @@
 import { gql, useMutation } from "@apollo/client";
-import { faHeartbeat, faRunning } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeartbeat,
+  faRunning,
+  faTint,
+  faProcedures,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import Button from "../components/auth/Button";
 import { BaseBox, DivTitle } from "../components/shared";
+import Iframe from "react-iframe";
 
 const UPLOADSPO2_MUTATION = gql`
   mutation uploadSpo2($username: String!) {
@@ -17,6 +23,8 @@ const UPLOADSPO2_MUTATION = gql`
       minSpo2
       avgSpo2
       maxSpo2
+      bpUp
+      bpDown
       createdAt
       isMine
     }
@@ -80,6 +88,7 @@ function SpO2() {
   let ok = false;
   let health = "";
   let avgSpo2 = 0;
+  let bpStatus = "";
   const onCompleted = (data) => {
     const {
       uploadSpo2: { id },
@@ -89,13 +98,15 @@ function SpO2() {
     } else {
     }
   };
-  const [uploadSpo2, { data, loading }] = useMutation(UPLOADSPO2_MUTATION, {
-    onCompleted,
-    variables: {
-      username,
-    },
-  });
-  console.log(data);
+  const [uploadSpo2, { data, loading, error }] = useMutation(
+    UPLOADSPO2_MUTATION,
+    {
+      onCompleted,
+      variables: {
+        username,
+      },
+    }
+  );
   if (data !== undefined) {
     ok = true;
   }
@@ -114,13 +125,48 @@ function SpO2() {
     avgSpo2 = 0;
     health = "";
   }
+
+  function arrayAverage(arr) {
+    var sum = 0;
+    for (var i in arr) {
+      sum += arr[i];
+    }
+    var numbersCnt = arr?.length;
+    return sum / numbersCnt;
+  }
+  const bpUP = Math.ceil(arrayAverage(data?.uploadSpo2?.bpUp));
+  const bpDOWN = Math.ceil(arrayAverage(data?.uploadSpo2?.bpDown));
+
+  if (bpUP < 120) {
+    bpStatus = "저혈압";
+  } else if (bpUP < 140) {
+    bpStatus = "고혈압 전단계";
+  } else if (bpUP < 160) {
+    bpStatus = "1기 고혈압";
+  } else if (bpUP < 180) {
+    bpStatus = "2기 전단계";
+  } else if (bpUP < 200) {
+    bpStatus = "고혈압 위기";
+  }
+
   return (
     <>
       <SpO2Container>
+        <DivTitle>생체 정보 측정</DivTitle>
+        <Iframe
+          url="http://localhost:8080/home"
+          width="90%"
+          height="400px"
+          id="myId"
+          className="myClassname"
+          display="initial"
+          position="relative"
+        />
         <SpO2Btn onClick={uploadSpo2}>
-          {loading ? "측정중..." : "SpO2 측정"}
+          {loading ? "측정중..." : "측정 정보 불러오기"}
         </SpO2Btn>
         <DivTitle>{loading ? "Loading..." : ""}</DivTitle>
+        <DivTitle>{loading ? "측정 실패시 현재 화면 새로고침" : ""}</DivTitle>
         {ok ? (
           <>
             <DivTitle>측정 완료</DivTitle>
@@ -140,10 +186,18 @@ function SpO2() {
                 <TopContentValue>{health}</TopContentValue>
               </TopContent>
               <TopContent>
-                <TopContentTitle>혈압</TopContentTitle>
+                <TopContentTitle>
+                  <FontAwesomeIcon icon={faTint} size="2x" color="red" />
+                  <span>혈압</span>
+                </TopContentTitle>
+                <TopContentValue>{bpUP + " / " + bpDOWN}</TopContentValue>
               </TopContent>
               <TopContent>
-                <TopContentTitle>혈압상태</TopContentTitle>
+                <TopContentTitle>
+                  <FontAwesomeIcon icon={faProcedures} size="2x" color="blue" />
+                  <span>혈압상태</span>
+                </TopContentTitle>
+                <TopContentValue>{bpStatus}</TopContentValue>
               </TopContent>
             </TopContentContainer>
           </>

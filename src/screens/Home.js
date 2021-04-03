@@ -1,5 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
-import { faHeartbeat, faRunning } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeartbeat,
+  faProcedures,
+  faRunning,
+  faTint,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -18,6 +23,8 @@ const SPO2_QUERY = gql`
       minSpo2
       avgSpo2
       maxSpo2
+      bpUp
+      bpDown
       createdAt
       isMine
     }
@@ -33,6 +40,9 @@ const Spo2Container = styled.div`
   margin-bottom: 20px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  @media (max-width: 600px) {
+    max-width: 90%;
+  }
 `;
 
 const Spo2Header = styled.div`
@@ -64,6 +74,11 @@ const TopContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+  @media (max-width: 600px) {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const TopContent = styled(BaseBox)`
@@ -85,6 +100,10 @@ const Spo2GraphContainer = styled(BaseBox)`
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding: 15px 0px;
+  @media (max-width: 600px) {
+    max-width: 90%;
+    margin: 0px auto;
+  }
 `;
 
 const TopContentTitle = styled.div`
@@ -95,18 +114,26 @@ const TopContentTitle = styled.div`
     font-weight: 600;
     font-size: 16px;
   }
+  @media (max-width: 600px) {
+    flex-direction: column;
+    font-size: 12px;
+  }
 `;
 
 const TopContentValue = styled.div`
   margin-top: 13px;
   font-size: 24px;
   font-weight: 500;
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 function Home() {
   const { data } = useQuery(SPO2_QUERY);
   let health = "";
   let avgSpo2 = 0;
+  let bpStatus = "";
   try {
     avgSpo2 = data?.seeSpo2[0].avgSpo2;
     if (avgSpo2 < 90) {
@@ -121,6 +148,29 @@ function Home() {
   } catch (e) {
     avgSpo2 = 0;
     health = "";
+  }
+  function arrayAverage(arr) {
+    var sum = 0;
+    for (var i in arr) {
+      sum += arr[i];
+    }
+    var numbersCnt = arr?.length;
+    return sum / numbersCnt;
+  }
+
+  const bpUP = Math.ceil(arrayAverage(data?.seeSpo2[0]?.bpUp));
+  const bpDOWN = Math.ceil(arrayAverage(data?.seeSpo2[0]?.bpDown));
+
+  if (bpUP < 120) {
+    bpStatus = "저혈압";
+  } else if (bpUP < 140) {
+    bpStatus = "고혈압 전단계";
+  } else if (bpUP < 160) {
+    bpStatus = "1기 고혈압";
+  } else if (bpUP < 180) {
+    bpStatus = "2기 전단계";
+  } else if (bpUP < 200) {
+    bpStatus = "고혈압 위기";
   }
 
   return (
@@ -141,14 +191,25 @@ function Home() {
           <TopContentValue>{health}</TopContentValue>
         </TopContent>
         <TopContent>
-          <TopContentTitle>혈압</TopContentTitle>
+          <TopContentTitle>
+            <FontAwesomeIcon icon={faTint} size="2x" color="red" />
+            <span>혈압</span>
+          </TopContentTitle>
+          <TopContentValue>{bpUP + " / " + bpDOWN}</TopContentValue>
         </TopContent>
         <TopContent>
-          <TopContentTitle>혈압상태</TopContentTitle>
+          <TopContentTitle>
+            <FontAwesomeIcon icon={faProcedures} size="2x" color="blue" />
+            <span>혈압상태</span>
+          </TopContentTitle>
+          <TopContentValue>{bpStatus}</TopContentValue>
         </TopContent>
       </TopContentContainer>
       <Spo2GraphContainer>
-        <Spo2Chart />
+        <Spo2Chart
+          bpUp={data?.seeSpo2[0]?.bpUp}
+          bpDown={data?.seeSpo2[0]?.bpDown}
+        />
       </Spo2GraphContainer>
       <DivTitle>최근 SpO2 측정값</DivTitle>
       {data?.seeSpo2?.map((spo2) => (
@@ -165,6 +226,8 @@ function Home() {
             <Spo2>Max SpO2 : {spo2.maxSpo2}%</Spo2>
             <Spo2>Min SpO2 : {spo2.minSpo2}%</Spo2>
             <Spo2>Avg SpO2 : {spo2.avgSpo2}%</Spo2>
+            <Spo2>Bp Up : {Math.ceil(arrayAverage(spo2.bpUp))}</Spo2>
+            <Spo2>Bp Down : {Math.ceil(arrayAverage(spo2.bpDown))}</Spo2>
           </Spo2Data>
         </Spo2Container>
       ))}

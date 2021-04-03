@@ -1,6 +1,6 @@
+import React from "react";
 import styled from "styled-components";
-import Highcharts from "highcharts/highstock";
-import HighchartsReact from "highcharts-react-official";
+import { Line, Bar } from "react-chartjs-2";
 
 const Section = styled.div`
   display: flex;
@@ -11,123 +11,92 @@ const Section = styled.div`
 const Container = styled.div`
   justify-content: center;
   align-items: center;
+  width: 1000%;
+  height: 100%;
 `;
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
 `;
 
-const Canvas = styled.div`
-  justify-content: center;
-  align-items: center;
-  width: 650px;
-  height: 400px;
-`;
-
-const categories = ["Max SpO2", "Min SpO2", "Avg SpO2"].reverse();
-
-function Spo2Chart(spo2) {
-  const obj = Object.values(spo2);
-
-  const chartOptions = {
-    chart: {
-      type: "bar",
-    },
-    title: {
-      text: null,
-    },
-    xAxis: [
-      {
-        categories: categories,
-        reversed: false,
-        labels: {
-          align: "center",
-          step: 1,
-          reserveSpace: false,
-          x: -5,
-          style: {
-            fontSize: "12px",
-            color: "black",
-          },
-        },
-        lineWidth: 0,
-        tickLength: 0,
-        left: "50%",
-      },
+const Spo2Chart = (value) => {
+  const dataBar = {
+    labels: [
+      "1회",
+      "2회",
+      "3회",
+      "4회",
+      "5회",
+      "6회",
+      "7회",
+      "8회",
+      "9회",
+      "10회",
     ],
-    yAxis: [
+    datasets: [
       {
-        title: {
-          text: null,
-        },
-        labels: {
-          format: "{value}%",
-          style: {
-            fontSize: "11px",
-          },
-        },
-        reversed: true,
-        left: 0,
-        width: "45%",
-        offset: 0,
-        min: 0,
-        max: 100,
+        label: "이완기 혈압",
+        backgroundColor: "rgba(255,99,132,0.6)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 1,
+        hoverBackgroundColor: "rgba(255,0,0,0.6)",
+        hoverBorderColor: "rgba(255,99,132,1)",
+        data: value.bpUp,
       },
       {
-        title: {
-          text: null,
-        },
-        labels: {
-          format: "{value}%",
-          style: {
-            fontSize: "11px",
-          },
-        },
-        left: "55%",
-        width: "45%",
-        offset: 0,
-        min: 0,
-        max: 100,
-      },
-    ],
-    plotOptions: {
-      series: {
-        stacking: "normal",
-      },
-    },
-    tooltip: {
-      backgroundColor: "#fff",
-      borderColor: "black",
-      borderRadius: 10,
-      borderWidth: 1,
-    },
-    series: [
-      {
-        name: "이전 SpO2",
-        data: [30.2, 87.5, 51.7].reverse(),
-      },
-      {
-        name: "현재 SpO2",
-        data: [69.8, 12.5, 48.3].reverse(),
-        yAxis: 1,
+        label: "수축기 혈압",
+        backgroundColor: "rgba(43,202,255,0.4)",
+        borderColor: "rgba(43,202,255,0.4)",
+        borderWidth: 1,
+        hoverBackgroundColor: "rgba(43,202,255,0.6)",
+        hoverBorderColor: "rgba(43,202,255,1)",
+        data: value.bpDown,
       },
     ],
   };
 
+  const optionsChart = {
+    legend: {
+      display: true,
+      position: "top",
+      labels: {
+        fontColor: "#262626",
+      },
+    },
+    scales: {
+      yAxes: [
+        {
+          display: true,
+          ticks: {
+            fontColor: "black",
+            min: 40,
+          },
+        },
+      ],
+      xAxes: [
+        {
+          ticks: {
+            fontColor: "black",
+          },
+        },
+      ],
+    },
+    tooltips: {
+      mode: "label",
+    },
+  };
+
   return (
-    <>
-      <Section>
-        <Container>
-          <Title>SpO2 측정값 비교</Title>
-          <Canvas>
-            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-          </Canvas>
-        </Container>
-      </Section>
-    </>
+    <Section>
+      <Container>
+        <Title>최근 측정 SpO2값으로 예측한 혈압</Title>
+        <Bar data={dataBar} options={optionsChart} width={100} height={50} />
+      </Container>
+    </Section>
   );
-}
+};
 
 export default Spo2Chart;

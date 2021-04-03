@@ -1,8 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { faDochub } from "@fortawesome/free-brands-svg-icons";
-import { faHeartbeat, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHeartbeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { exact } from "prop-types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
@@ -27,6 +26,9 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 600px) {
+    max-width: 90%;
+  }
 `;
 
 const Column = styled.div``;
