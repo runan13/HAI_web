@@ -101,7 +101,9 @@ const EditContainer = styled(BaseBox)`
 `;
 
 const SDivTitle = styled(DivTitle)`
-  margin-left: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function Profile() {
@@ -133,7 +135,7 @@ function Profile() {
           loading ? "Loading.." : `${data?.seeProfile?.username}'s Profile`
         }
       />
-      <DivTitle>프로필</DivTitle>
+      <SDivTitle>프로필</SDivTitle>
       <ProfileContainer>
         <AvatarColumn>
           <Avatar xl url={data?.seeProfile?.avatar} />

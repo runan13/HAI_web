@@ -23,8 +23,11 @@ const SPO2_QUERY = gql`
       minSpo2
       avgSpo2
       maxSpo2
+      avgSpo2_Sort
       bpUp
+      bpUp_Sort
       bpDown
+      bpDown_Sort
       createdAt
       isMine
     }
@@ -129,13 +132,19 @@ const TopContentValue = styled.div`
   }
 `;
 
+const SDivTitle = styled(DivTitle)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 function Home() {
   const { data } = useQuery(SPO2_QUERY);
   let health = "";
   let avgSpo2 = 0;
   let bpStatus = "";
   try {
-    avgSpo2 = data?.seeSpo2[0].avgSpo2;
+    avgSpo2 = data?.seeSpo2[0].avgSpo2_Sort;
     if (avgSpo2 < 90) {
       health = "Bad";
     } else if (avgSpo2 < 96) {
@@ -157,9 +166,19 @@ function Home() {
     var numbersCnt = arr?.length;
     return sum / numbersCnt;
   }
-
-  const bpUP = Math.ceil(arrayAverage(data?.seeSpo2[0]?.bpUp));
-  const bpDOWN = Math.ceil(arrayAverage(data?.seeSpo2[0]?.bpDown));
+  const bpUP = data?.seeSpo2[0]?.bpUp_Sort;
+  const bpDOWN = data?.seeSpo2[0]?.bpDown_Sort;
+  const bpUpArray = [];
+  const bpDownArray = [];
+  // BP 평균 테스트
+  const bpUpGraph = data?.seeSpo2?.map((spo2) => {
+    bpUpArray.push(spo2.bpUp_Sort);
+    return bpUpArray;
+  });
+  const bpDownGraph = data?.seeSpo2?.map((spo2) => {
+    bpDownArray.push(spo2.bpDown_Sort);
+    return bpDownArray;
+  });
 
   if (bpUP < 120) {
     bpStatus = "저혈압";
@@ -206,12 +225,9 @@ function Home() {
         </TopContent>
       </TopContentContainer>
       <Spo2GraphContainer>
-        <Spo2Chart
-          bpUp={data?.seeSpo2[0]?.bpUp}
-          bpDown={data?.seeSpo2[0]?.bpDown}
-        />
+        <Spo2Chart bpUp={bpUpGraph?.[0]} bpDown={bpDownGraph?.[0]} />
       </Spo2GraphContainer>
-      <DivTitle>최근 SpO2 측정값</DivTitle>
+      <SDivTitle>생체정보 측정값</SDivTitle>
       {data?.seeSpo2?.map((spo2) => (
         <Spo2Container key={spo2.id}>
           <Spo2Header>
@@ -223,11 +239,9 @@ function Home() {
             </Link>
           </Spo2Header>
           <Spo2Data>
-            <Spo2>Max SpO2 : {spo2.maxSpo2}%</Spo2>
-            <Spo2>Min SpO2 : {spo2.minSpo2}%</Spo2>
-            <Spo2>Avg SpO2 : {spo2.avgSpo2}%</Spo2>
-            <Spo2>Bp Up : {Math.ceil(arrayAverage(spo2.bpUp))}</Spo2>
-            <Spo2>Bp Down : {Math.ceil(arrayAverage(spo2.bpDown))}</Spo2>
+            <Spo2>평균 산소포화도 : {spo2.avgSpo2_Sort}%</Spo2>
+            <Spo2>수축기 혈압 : {spo2.bpUp_Sort}</Spo2>
+            <Spo2>이완기 혈압 : {spo2.bpDown_Sort}</Spo2>
           </Spo2Data>
         </Spo2Container>
       ))}

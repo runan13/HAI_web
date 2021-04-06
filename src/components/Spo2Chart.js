@@ -38,7 +38,7 @@ const Spo2Chart = (value) => {
     ],
     datasets: [
       {
-        label: "이완기 혈압",
+        label: "수축기 혈압",
         backgroundColor: "rgba(255,99,132,0.6)",
         borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
@@ -47,7 +47,7 @@ const Spo2Chart = (value) => {
         data: value.bpUp,
       },
       {
-        label: "수축기 혈압",
+        label: "이완기 혈압",
         backgroundColor: "rgba(43,202,255,0.4)",
         borderColor: "rgba(43,202,255,0.4)",
         borderWidth: 1,

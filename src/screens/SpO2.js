@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import {
   faHeartbeat,
   faRunning,
@@ -11,6 +11,7 @@ import styled from "styled-components";
 import Button from "../components/auth/Button";
 import { BaseBox, DivTitle } from "../components/shared";
 import Iframe from "react-iframe";
+import { spo2SpanVar } from "../apollo";
 
 const UPLOADSPO2_MUTATION = gql`
   mutation uploadSpo2($username: String!) {
@@ -23,6 +24,7 @@ const UPLOADSPO2_MUTATION = gql`
       minSpo2
       avgSpo2
       maxSpo2
+      avgSpo2_Sort
       bpUp
       bpDown
       createdAt
@@ -81,6 +83,12 @@ const TopContentValue = styled.div`
   margin-top: 13px;
   font-size: 24px;
   font-weight: 500;
+`;
+
+const Spo2Span = styled.span`
+  font-size: 17px;
+  margin-top: 25px;
+  font-weight: 600;
 `;
 
 function SpO2() {
@@ -154,7 +162,7 @@ function SpO2() {
       <SpO2Container>
         <DivTitle>생체 정보 측정</DivTitle>
         <Iframe
-          url="http://localhost:8080/home"
+          url="http://49.161.233.162:5555/home"
           width="90%"
           height="400px"
           id="myId"
@@ -165,7 +173,8 @@ function SpO2() {
         <SpO2Btn onClick={uploadSpo2}>
           {loading ? "측정중..." : "측정 정보 불러오기"}
         </SpO2Btn>
-        <DivTitle>{loading ? "Loading..." : ""}</DivTitle>
+        <Spo2Span>확인 버튼을 누르면 측정이 시작됩니다.</Spo2Span>
+        <Spo2Span>측정 중에는 별도의 동작을 하지 말아주세요.</Spo2Span>
         <DivTitle>{loading ? "측정 실패시 현재 화면 새로고침" : ""}</DivTitle>
         {ok ? (
           <>
@@ -176,7 +185,9 @@ function SpO2() {
                   <FontAwesomeIcon icon={faHeartbeat} size="2x" color="red" />
                   <span>측정 SpO2 평균</span>
                 </TopContentTitle>
-                <TopContentValue>{data?.uploadSpo2?.avgSpo2}%</TopContentValue>
+                <TopContentValue>
+                  {data?.uploadSpo2?.avgSpo2_Sort}%
+                </TopContentValue>
               </TopContent>
               <TopContent>
                 <TopContentTitle>
