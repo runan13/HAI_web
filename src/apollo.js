@@ -20,7 +20,7 @@ export const logUserIn = (token) => {
 export const logUserOut = () => {
   localStorage.removeItem(TOKEN);
   isLoggedInVar(false);
-  window.location.assign("http://localhost:3000/");
+  window.location.assign("https://hai-halla.netlify.app");
 };
 
 export const darkModeVar = makeVar(Boolean(localStorage.getItem(DARK_MODE)));
