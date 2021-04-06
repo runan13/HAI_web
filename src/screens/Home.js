@@ -158,14 +158,6 @@ function Home() {
     avgSpo2 = 0;
     health = "";
   }
-  function arrayAverage(arr) {
-    var sum = 0;
-    for (var i in arr) {
-      sum += arr[i];
-    }
-    var numbersCnt = arr?.length;
-    return sum / numbersCnt;
-  }
   const bpUP = data?.seeSpo2[0]?.bpUp_Sort;
   const bpDOWN = data?.seeSpo2[0]?.bpDown_Sort;
   const bpUpArray = [];

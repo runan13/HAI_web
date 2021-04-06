@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 const Section = styled.div`
   display: flex;

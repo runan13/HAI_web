@@ -1,4 +1,4 @@
-import { gql, useMutation, useReactiveVar } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import {
   faHeartbeat,
   faRunning,
@@ -11,7 +11,6 @@ import styled from "styled-components";
 import Button from "../components/auth/Button";
 import { BaseBox, DivTitle } from "../components/shared";
 import Iframe from "react-iframe";
-import { spo2SpanVar } from "../apollo";
 
 const UPLOADSPO2_MUTATION = gql`
   mutation uploadSpo2($username: String!) {
@@ -106,15 +105,12 @@ function SpO2() {
     } else {
     }
   };
-  const [uploadSpo2, { data, loading, error }] = useMutation(
-    UPLOADSPO2_MUTATION,
-    {
-      onCompleted,
-      variables: {
-        username,
-      },
-    }
-  );
+  const [uploadSpo2, { data, loading }] = useMutation(UPLOADSPO2_MUTATION, {
+    onCompleted,
+    variables: {
+      username,
+    },
+  });
   if (data !== undefined) {
     ok = true;
   }
