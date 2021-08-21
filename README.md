@@ -9,7 +9,6 @@ netlify 무료 호스팅을 사용해 배포하였다.
 
 현재 하드웨어 장비는 학교의 요청으로 제공하였기 때문에 SpO2 페이지의 iFrame이 동작하지 않습니다.
 
-![스크린샷 2021-05-14 오후 3.10.32.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/69ced13f-8b90-4b89-bbd1-ba89d9b38b0f/스크린샷_2021-05-14_오후_3.10.32.png)
 
 ---
 
@@ -32,17 +31,3 @@ Apollo Client, ReactJS, GraphQL, styled-components
 **Timeline:**  2021-02-25 ~ 2021-04-06
 
 ---
-
-# Prototype
-
-프로젝트 시연영상 (노션 개인 요금제 5MB 제한으로 드롭박스 링크로 대체하겠습니다)
-
-[https://www.dropbox.com/s/x60ttbx6r8ip3gb/시연영상2.mp4?dl=0](https://www.dropbox.com/s/x60ttbx6r8ip3gb/%EC%8B%9C%EC%97%B0%EC%98%81%EC%83%812.mp4?dl=0)
-
- 
-
----
-
-# 🎯  Web 순서도
-
-![WEB_simple.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7eabcb0b-7b5f-4021-b38c-4632fa58bb5a/WEB_simple.png)
